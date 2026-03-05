@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        binary: [gnockerc, gnockers]
+        goos: [linux]
+        goarch: [amd64, arm64]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          go build -o ${{ matrix.binary }}-${{ matrix.goos }}-${{ matrix.goarch }} -ldflags="-s -w" ./cmd/${{ matrix.binary }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: '${{ github.workspace }}/${{ matrix.binary }}-${{ matrix.goos }}-${{ matrix.goarch }}'
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ matrix.binary }}-${{ matrix.goos }}-${{ matrix.goarch }}
+          asset_name: ${{ matrix.binary }}-${{ matrix.goos }}-${{ matrix.goarch }}
+          asset_content_type: application/octet-stream
