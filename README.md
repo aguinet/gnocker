@@ -226,7 +226,7 @@ terminate.
 
 # Build from source
 
-**gnocker** needs golang >= 1.22. To build both the client and server from source:
+**gnocker** needs golang >= 1.24. To build both the client and server from source:
 
 ```
 # Build the client
