@@ -1,0 +1,18 @@
+[Unit]
+Description=gnockers
+After=network.target nss-user-lookup.target auditd.service
+
+[Service]
+ExecStart=/usr/local/bin/gnockers -akf /etc/gnockers/authorized_keys -listen-host 0.0.0.0 -listen-port 22 -server-host 127.0.0.1 -server-port 2222
+Restart=always
+DynamicUser=yes
+SecureBits=keep-caps
+NoNewPrivileges=yes
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ProtectHome=yes
+ProtectSystem=strict
+KillMode=none
+ExecStop=/bin/kill -SIGTERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
