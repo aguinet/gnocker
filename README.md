@@ -20,10 +20,11 @@ a human. Please use it at your own risks!
     - [Client configuration](#client-configuration)
 5. [Graceful shutdown](#graceful-shutdown)
 6. [Build from source](#build-from-source)
-7. [Why gnocker?](#why-gnocker)
-8. [Attack model](#attack-model)
-9. [Protocol](#protocol)
-10. [Why Golang?](#why-golang)
+7. [Verified releases](#verified-releases)
+8. [Why gnocker?](#why-gnocker)
+9. [Attack model](#attack-model)
+10. [Protocol](#protocol)
+11. [Why Golang?](#why-golang)
 
 
 # Goals
@@ -69,12 +70,8 @@ In this tutorial, we're going to connect to an SSH server through **gnocker**.
 First, download the `gnockerc` client and `gnockers` server from the [Releases
 page](https://github.com/aguinet/gnocker/releases).
 
-Optionally, verify them with [Github Artifact Attestation](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations):
+Optionally, [verify their provenance](#verified-releases).
 
-```
-$ gh attestation verify gnockers-linux-amd64 --repo aguinet/gnocker
-$ gh attestation verify gnockerc-linux-amd64 --repo aguinet/gnocker
-```
 
 ## Prepare an authorized key file
 
@@ -238,6 +235,23 @@ $ go build ./cmd/gnockerc
 # Build the server
 $ go build ./cmd/gnockers
 ```
+
+# Verified releases
+
+Binaries in the [releases page](https://github.com/aguinet/gnocker/releases)
+are using [Github's artifact
+attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations).
+This gives some cryptographic proof that the binaries have been generated from
+a given tag/commit, and that this happened in an associated Github action
+environment.
+
+To verify the downloaded binaries, [install the Github CLI
+tool](https://cli.github.com/) and run for instance:
+
+```
+$ gh attestation verify gnockers-linux-arm64 --repo aguinet/gnocker
+```
+
 
 # Why gnocker?
 
