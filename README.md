@@ -1,9 +1,9 @@
 # gnocker
 
-**gnocker** is a port knocking implementation that enables SSH key-based,
-latency-efficient access control without requiring pre-opened ports. By reusing
-reusing the single TCP stream for both authentication and the upstream
-application transport, gnocker avoids extra round-trip latency.
+**gnocker** is a port knocking implementation that uses SSH public key
+infrastructure to control access to services. It authenticates clients before
+forwarding their connection to an upstream server, all within a single TCP
+stream—no extra round trips, no firewall rules to manage.
 
 **WARNING**: **gnocker** hasn't been through a third-party security evaluation by
 a human. Please use it at your own risks!
